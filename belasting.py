@@ -19,7 +19,7 @@ def arbeidsheffingskorting(bruto_inkomen):
     if bruto_inkomen < 10741:
         return 0.08231*(bruto_inkomen)
     elif bruto_inkomen < 23201:
-        return 884 + 0.029861*(bruto_inkomen - 10740)
+        return 884 + 0.29861*(bruto_inkomen - 10740)
     elif bruto_inkomen < 37691:
         return 4605 + 0.03085*(bruto_inkomen - 23201)
     elif bruto_inkomen < 115295:
@@ -48,7 +48,7 @@ def zorgtoeslag_jaarlijks(bruto_inkomen):
 
 ## ------------------ Main method ---------------------
 if __name__ == '__main__':
-    bruto_inkomens = np.arange(2e4, 8e4, 10)
+    bruto_inkomens = np.arange(2e4, 8e4, 10000)
     netto_inkomens = np.zeros(bruto_inkomens.shape)
     toeslagen_inkomens = np.zeros(bruto_inkomens.shape)
 
@@ -62,8 +62,15 @@ if __name__ == '__main__':
         toeslagen_inkomen = netto_inkomen + toeslagen_totaal
         toeslagen_inkomens[i] = toeslagen_inkomen
 
+    fig1 = plt.figure()
     plt.plot(bruto_inkomens, bruto_inkomens, label="geen belasting")
-    plt.plot(bruto_inkomens, netto_inkomens, label="belasting")
-    plt.plot(bruto_inkomens, toeslagen_inkomens, label="toeslagen")
+    plt.plot(bruto_inkomens, netto_inkomens, label="na belasting")
+    plt.plot(bruto_inkomens, toeslagen_inkomens, label="na toeslagen")
     plt.xlabel("bruto"); plt.ylabel("netto")
+    plt.grid(); plt.legend(); plt.show()
+    
+    fig2 = plt.figure()
+    plt.plot(bruto_inkomens, (bruto_inkomens - netto_inkomens)/bruto_inkomens, label="na belasting")
+    plt.plot(bruto_inkomens, (bruto_inkomens - toeslagen_inkomens)/bruto_inkomens, label="na toeslagen")
+    plt.xlabel("bruto"); plt.ylabel("belastingdruk")
     plt.grid(); plt.legend(); plt.show()
